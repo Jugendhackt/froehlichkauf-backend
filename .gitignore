@@ -10,3 +10,14 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# Output of the compiler
+backend
+
+# Output of make release
+release/*
+
+# Custom configurations, keys and certs
+configs/*.key
+configs/*.pem
+configs/main.conf

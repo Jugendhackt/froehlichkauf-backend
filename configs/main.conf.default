@@ -1,0 +1,6 @@
+{
+    "port":"443",
+    "cert":"cert.pem",
+    "key":"key.pem",
+    "securityConfig":"security.conf"
+}
