@@ -1,7 +1,7 @@
 language: go
 
 go:
-  - 1.12 
+  - "1.12"
 
 script:
   - export GOBIN=$GOPATH/bin
@@ -16,7 +16,7 @@ before_deploy:
   - make VERSION=${TRAVIS_TAG} release -j2
   - cp configs/main.conf.default release/main.conf
   - zip release/data.zip configs/*
-  deploy:
+deploy:
   provider: releases
   api_key: $GITHUB_OAUTH_TOKEN
   file: release/*
