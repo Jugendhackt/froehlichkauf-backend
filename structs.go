@@ -19,6 +19,6 @@ type serverConfig struct {
 	SecurityConfig string `json:"securityConfig"`
 }
 type nutrition struct {
-	Name  string
-	Value float32
+	Name  string  `json:"name"`
+	Value float32 `json:"value"`
 }

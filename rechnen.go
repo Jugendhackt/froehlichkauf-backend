@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"log"
+	"math"
 )
 
 func umwelt(material, herkunftNutzer, herkunftProdukt string) (float32, float32, float32, error) {
@@ -58,8 +59,59 @@ func ethik(bedingungen string) (float32, error) {
 	return herstellungsbedingungen, fehler
 }
 
-/*
-func gesundheit(nutritions []nutrition, zutaten []string) {
+func gesundheit(nutritions []nutrition, zutaten []string) (float32, float32, float32) {
+	var ingredients []nutrition
+	parseJSONFile("ingredients.json", &ingredients)
+	var punktzahlInhalt float32
+	var zähler int
+
+	for i := range zutaten {
+		zutat := zutaten[i]
+		for j := range ingredients {
+			if zutat == ingredients[j].Name {
+				punktzahlInhalt += ingredients[j].Value * ingredients[j].Value
+				zähler++
+				break
+			}
+		}
+	}
+
+	gesamtpunktzahlInhalt := float32(math.Sqrt(float64(punktzahlInhalt / float32(zähler))))
+
+	var nährwertpunktzahl float32
+	var zähler2 int
+
+	for i := range nutritions {
+		switch nutritions[i].Name {
+		case "sugar":
+			if nutritions[i].Value < 5 {
+				nährwertpunktzahl += 5
+			} else if nutritions[i].Value < 22.5 {
+				nährwertpunktzahl += 2
+			}
+			zähler2++
+
+		case "salt":
+			if nutritions[i].Value < 0.3 {
+				nährwertpunktzahl += 5
+			} else if nutritions[i].Value < 1.5 {
+				nährwertpunktzahl += 2
+			}
+			zähler2++
+
+		case "lipides":
+			if nutritions[i].Value < 3 {
+				nährwertpunktzahl += 5
+			} else if nutritions[i].Value < 17.5 {
+				nährwertpunktzahl += 2
+			}
+			zähler2++
+		}
+	}
+
+	gesamtpunktzahlNähwert := nährwertpunktzahl / float32(zähler2)
+	ergebnis := 0.2*gesamtpunktzahlInhalt + 0.8*gesamtpunktzahlNähwert
+
+	return ergebnis, gesamtpunktzahlInhalt, gesamtpunktzahlNähwert
 
 }
-*/
