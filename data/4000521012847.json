@@ -1,0 +1,34 @@
+{
+	"name": "Zitronenkuchen",
+	"supplier": "Dr. Oetker",
+	"country": "de",
+	"code": "4000521012847",
+	"contents": [
+		"Zucker",
+		"Weizenmehl",
+		"Hühnervollei",
+		"Palmfett",
+		"Glycerin",
+		"Sorbit",
+		"Weizenstärke",
+		"Lecithine",
+		"Glukose-Fruktose-Sirup",
+		"natürliches Aroma",
+		"Natriumcarbonate",
+		"Diphosphate",
+		"Monoglyceride",
+		"Digylceride",
+		"Natriumacetate",
+		"Carotin"],
+	"nutritional": {
+		"calories":480,
+		"glucides":0.58,
+		"sugar":0.31,
+		"lipides":0.25,
+		"proteins":0.053,
+		"salt":0.0055
+	},
+	"reusable": false,
+	"packaging": "plastic",
+	"description": ""
+}

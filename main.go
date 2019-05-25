@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -36,6 +37,7 @@ func main() {
 	}
 
 	mux.HandleFunc("/", rootHandler)
+	mux.HandleFunc("/getProduct", productHandler)
 
 	log.Fatal(srv.ListenAndServeTLS("configs/"+conf.Cert, "configs/"+conf.Key))
 
@@ -45,6 +47,45 @@ func rootHandler(w http.ResponseWriter, req *http.Request) {
 	setSecurityHeaders(w)
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte("Everything is fine"))
+}
+
+func productHandler(w http.ResponseWriter, req *http.Request) {
+	setSecurityHeaders(w)
+
+	// decode incoming request (json)
+	decoder := json.NewDecoder(req.Body)
+	var code barcode
+	err := decoder.Decode(&code)
+	if err != nil {
+		panic(err)
+	}
+
+	log.Printf("incoming request: %+v", code)
+
+	var data datapoint
+
+	parseJSONFile("data/"+code.Code+".json", &data)
+
+	scoreUmwelt, scoreVerpackung, scoreHerkunft, errorUmwelt := umwelt(data.Packaging, code.Origin, data.Country)
+
+	scoreEthik, errorEthik := ethik("")
+
+	response := "<h1>Everything is fine.</h1>"
+
+	response += "<h2>Umwelt:" + fToString(scoreUmwelt) + "</h2>"
+	response += "Verpackung:" + fToString(scoreVerpackung) + "<br />"
+	response += "Herkunft:" + fToString(scoreHerkunft) + "<br />"
+	if errorUmwelt != nil {
+		response += "<h3>" + errorUmwelt.Error() + "</h3><br />"
+	}
+
+	response += "<h2>Ethik:" + fToString(scoreEthik) + "</h2>"
+	if errorEthik != nil {
+		response += "<h3>" + errorEthik.Error() + "</h3><br />"
+	}
+
+	w.WriteHeader(http.StatusAccepted)
+	w.Write([]byte(response))
 }
 
 func getCiphers() []uint16 {
@@ -87,10 +128,16 @@ func parseJSONFile(file string, i interface{}) {
 	err = json.Unmarshal(data[0:count], i)
 
 	checkErr(err)
+
 }
 
 func checkErr(err error) {
 	if err != nil {
 		log.Println(err.Error())
 	}
+}
+
+func fToString(f float32) string {
+	ret := fmt.Sprintf("%g", f)
+	return ret
 }
