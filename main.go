@@ -54,7 +54,7 @@ func productHandler(w http.ResponseWriter, req *http.Request) {
 
 	// decode incoming request (json)
 	decoder := json.NewDecoder(req.Body)
-	var code barcode
+	var code request
 	err := decoder.Decode(&code)
 	if err != nil {
 		panic(err)
@@ -81,26 +81,38 @@ func productHandler(w http.ResponseWriter, req *http.Request) {
 
 	scoreHealth, scoreIngredients, scoreNutrition := gesundheit(nutritions, data.Contents)
 
-	response := "<h1>Everything is fine.</h1>"
+	var resp response
 
-	response += "<h2>Umwelt:" + fToString(scoreUmwelt) + "</h2>"
-	response += "Verpackung:" + fToString(scoreVerpackung) + "<br />"
-	response += "Herkunft:" + fToString(scoreHerkunft) + "<br />"
+	resp.Name = data.Name
+	resp.Nutritional = data.Nutritional
+	resp.Packaging = data.Packaging
+	resp.Reusable = data.Reusable
+	resp.Supplier = data.Supplier
+	resp.Country = data.Country
+	resp.Contents = data.Contents
+	resp.Code = data.Code
+	resp.Description = data.Description
+	resp.ScoreEthik = scoreEthik
+	resp.ScoreHealth = scoreHealth
+	resp.ScoreHerkunft = scoreHerkunft
+	resp.ScoreIngredients = scoreIngredients
+	resp.ScoreNutrition = scoreNutrition
+	resp.ScoreUmwelt = scoreUmwelt
+	resp.ScoreVerpackung = scoreVerpackung
+	resp.Errors = ""
+
 	if errorUmwelt != nil {
-		response += "<h3>" + errorUmwelt.Error() + "</h3><br />"
+		resp.Errors += ";Umwelt:" + errorUmwelt.Error()
 	}
-
-	response += "<h2>Ethik:" + fToString(scoreEthik) + "</h2>"
 	if errorEthik != nil {
-		response += "<h3>" + errorEthik.Error() + "</h3><br />"
+		resp.Errors += ";Ethik:" + errorEthik.Error()
 	}
 
-	response += "<h2>Health:" + fToString(scoreHealth) + "</h2>"
-	response += "Ingredients:" + fToString(scoreIngredients) + "<br />"
-	response += "Nutrition:" + fToString(scoreNutrition) + "<br />"
+	w.Header().Set("Content-Type", "application/json")
 
-	w.WriteHeader(http.StatusAccepted)
-	w.Write([]byte(response))
+	err = json.NewEncoder(w).Encode(resp)
+
+	checkErr(err)
 }
 
 func getCiphers() []uint16 {

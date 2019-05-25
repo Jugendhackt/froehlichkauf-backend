@@ -12,6 +12,26 @@ type datapoint struct {
 	Description string      `json:"description"`
 }
 
+type response struct {
+	Name             string      `json:"name"`
+	Supplier         string      `json:"supplier"`
+	Country          string      `json:"country"`
+	Code             string      `json:"code"`
+	Contents         []string    `json:"contents"`
+	Nutritional      nutritional `json:"nutritional"`
+	Reusable         bool        `json:"reusable"`
+	Packaging        string      `json:"packaging"`
+	Description      string      `json:"description"`
+	Errors           string      `json:"errors"`
+	ScoreUmwelt      float32     `json:"scoreUmwelt"`
+	ScoreVerpackung  float32     `json:"scoreVerpackung"`
+	ScoreHerkunft    float32     `json:"scoreHerkunft"`
+	ScoreEthik       float32     `json:"scoreEthik"`
+	ScoreHealth      float32     `json:"scoreHealth"`
+	ScoreIngredients float32     `json:"scoreIngredients"`
+	ScoreNutrition   float32     `json:"scoreNutrition"`
+}
+
 type nutritional struct {
 	Calories float32 `json:"calories"`
 	Glucides float32 `json:"glucides"`
@@ -21,7 +41,7 @@ type nutritional struct {
 	Salt     float32 `json:"salt"`
 }
 
-type barcode struct {
+type request struct {
 	Code   string `json:"code"`
 	Origin string `json:"origin"`
 }
