@@ -11,6 +11,7 @@ import (
 )
 
 var securityHeaders []securitySetting
+var encryption bool
 
 func main() {
 
@@ -22,6 +23,7 @@ func main() {
 	mux := http.NewServeMux()
 
 	if conf.Encryption == true {
+		encryption = true
 
 		cfg := &tls.Config{
 			MinVersion:               tls.VersionTLS12,
@@ -43,6 +45,8 @@ func main() {
 
 		log.Fatal(srv.ListenAndServeTLS("configs/"+conf.Cert, "configs/"+conf.Key))
 	} else {
+		encryption = false
+
 		srv := &http.Server{
 			Addr:    "0.0.0.0:" + conf.Port,
 			Handler: mux,
@@ -65,67 +69,81 @@ func rootHandler(w http.ResponseWriter, req *http.Request) {
 func productHandler(w http.ResponseWriter, req *http.Request) {
 	setSecurityHeaders(w)
 
-	// decode incoming request (json)
-	decoder := json.NewDecoder(req.Body)
-	var code request
-	err := decoder.Decode(&code)
-	if err != nil {
-		panic(err)
+	if req.Header.Get("Content-Type") == "application/json" {
+
+		// decode incoming request (json)
+		decoder := json.NewDecoder(req.Body)
+		var code request
+		err := decoder.Decode(&code)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("Error with json Format:" + err.Error()))
+		} else {
+
+			log.Printf("incoming request: %+v", code)
+
+			var data datapoint
+
+			err = newParseJSONFile("data/"+code.Code+".json", &data)
+
+			if err != nil {
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write([]byte("Error with json File:" + err.Error()))
+			} else {
+
+				scoreUmwelt, scoreVerpackung, scoreHerkunft, errorUmwelt := umwelt(data.Packaging, code.Origin, data.Country)
+
+				scoreEthik, errorEthik := ethik("")
+
+				var nutritions []nutrition
+
+				nutritions = append(nutritions, nutrition{"calories", data.Nutritional.Calories})
+				nutritions = append(nutritions, nutrition{"glucides", data.Nutritional.Glucides})
+				nutritions = append(nutritions, nutrition{"sugar", data.Nutritional.Sugar})
+				nutritions = append(nutritions, nutrition{"lipides", data.Nutritional.Lipides})
+				nutritions = append(nutritions, nutrition{"proteins", data.Nutritional.Proteins})
+				nutritions = append(nutritions, nutrition{"salt", data.Nutritional.Salt})
+
+				scoreHealth, scoreIngredients, scoreNutrition := gesundheit(nutritions, data.Contents)
+
+				var resp response
+
+				resp.Name = data.Name
+				resp.Nutritional = data.Nutritional
+				resp.Packaging = data.Packaging
+				resp.Reusable = data.Reusable
+				resp.Supplier = data.Supplier
+				resp.Country = data.Country
+				resp.Contents = data.Contents
+				resp.Code = data.Code
+				resp.Description = data.Description
+				resp.ScoreEthik = scoreEthik
+				resp.ScoreHealth = scoreHealth
+				resp.ScoreHerkunft = scoreHerkunft
+				resp.ScoreIngredients = scoreIngredients
+				resp.ScoreNutrition = scoreNutrition
+				resp.ScoreUmwelt = scoreUmwelt
+				resp.ScoreVerpackung = scoreVerpackung
+				resp.Errors = ""
+
+				if errorUmwelt != nil {
+					resp.Errors += ";Umwelt:" + errorUmwelt.Error()
+				}
+				if errorEthik != nil {
+					resp.Errors += ";Ethik:" + errorEthik.Error()
+				}
+
+				w.Header().Set("Content-Type", "application/json")
+
+				err = json.NewEncoder(w).Encode(resp)
+
+				checkErr(err)
+			}
+		}
+	} else {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Wrong Content-Type expected application/json"))
 	}
-
-	log.Printf("incoming request: %+v", code)
-
-	var data datapoint
-
-	parseJSONFile("data/"+code.Code+".json", &data)
-
-	scoreUmwelt, scoreVerpackung, scoreHerkunft, errorUmwelt := umwelt(data.Packaging, code.Origin, data.Country)
-
-	scoreEthik, errorEthik := ethik("")
-
-	var nutritions []nutrition
-
-	nutritions = append(nutritions, nutrition{"calories", data.Nutritional.Calories})
-	nutritions = append(nutritions, nutrition{"glucides", data.Nutritional.Glucides})
-	nutritions = append(nutritions, nutrition{"sugar", data.Nutritional.Sugar})
-	nutritions = append(nutritions, nutrition{"lipides", data.Nutritional.Lipides})
-	nutritions = append(nutritions, nutrition{"proteins", data.Nutritional.Proteins})
-	nutritions = append(nutritions, nutrition{"salt", data.Nutritional.Salt})
-
-	scoreHealth, scoreIngredients, scoreNutrition := gesundheit(nutritions, data.Contents)
-
-	var resp response
-
-	resp.Name = data.Name
-	resp.Nutritional = data.Nutritional
-	resp.Packaging = data.Packaging
-	resp.Reusable = data.Reusable
-	resp.Supplier = data.Supplier
-	resp.Country = data.Country
-	resp.Contents = data.Contents
-	resp.Code = data.Code
-	resp.Description = data.Description
-	resp.ScoreEthik = scoreEthik
-	resp.ScoreHealth = scoreHealth
-	resp.ScoreHerkunft = scoreHerkunft
-	resp.ScoreIngredients = scoreIngredients
-	resp.ScoreNutrition = scoreNutrition
-	resp.ScoreUmwelt = scoreUmwelt
-	resp.ScoreVerpackung = scoreVerpackung
-	resp.Errors = ""
-
-	if errorUmwelt != nil {
-		resp.Errors += ";Umwelt:" + errorUmwelt.Error()
-	}
-	if errorEthik != nil {
-		resp.Errors += ";Ethik:" + errorEthik.Error()
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-
-	err = json.NewEncoder(w).Encode(resp)
-
-	checkErr(err)
 }
 
 func getCiphers() []uint16 {
@@ -145,8 +163,10 @@ func getCiphers() []uint16 {
 }
 
 func setSecurityHeaders(w http.ResponseWriter) {
-	for i := range securityHeaders {
-		w.Header().Set(securityHeaders[i].Header, securityHeaders[i].Option)
+	if encryption {
+		for i := range securityHeaders {
+			w.Header().Set(securityHeaders[i].Header, securityHeaders[i].Option)
+		}
 	}
 }
 
@@ -168,6 +188,27 @@ func parseJSONFile(file string, i interface{}) {
 	err = json.Unmarshal(data[0:count], i)
 
 	checkErr(err)
+
+}
+
+func newParseJSONFile(file string, i interface{}) error {
+	// Import Configuration
+	file = filepath.Clean(file)
+	files, err := os.Open(file) // For read access.
+	if err != nil {
+		return err
+	}
+	data := make([]byte, 10000)
+	count, err := files.Read(data)
+	if err != nil {
+		return err
+	}
+
+	log.Println(string(data[0:count]))
+
+	err = json.Unmarshal(data[0:count], i)
+
+	return err
 
 }
 
