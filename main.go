@@ -21,25 +21,38 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	cfg := &tls.Config{
-		MinVersion:               tls.VersionTLS12,
-		MaxVersion:               tls.VersionTLS13,
-		CurvePreferences:         []tls.CurveID{tls.X25519, tls.CurveP521, tls.CurveP384, tls.CurveP256},
-		PreferServerCipherSuites: true,
-		CipherSuites:             getCiphers(),
+	if conf.Encryption == true {
+
+		cfg := &tls.Config{
+			MinVersion:               tls.VersionTLS12,
+			MaxVersion:               tls.VersionTLS13,
+			CurvePreferences:         []tls.CurveID{tls.X25519, tls.CurveP521, tls.CurveP384, tls.CurveP256},
+			PreferServerCipherSuites: true,
+			CipherSuites:             getCiphers(),
+		}
+
+		srv := &http.Server{
+			Addr:         "0.0.0.0:" + conf.Port,
+			Handler:      mux,
+			TLSConfig:    cfg,
+			TLSNextProto: make(map[string]func(*http.Server, *tls.Conn, http.Handler)),
+		}
+
+		mux.HandleFunc("/", rootHandler)
+		mux.HandleFunc("/getProduct", productHandler)
+
+		log.Fatal(srv.ListenAndServeTLS("configs/"+conf.Cert, "configs/"+conf.Key))
+	} else {
+		srv := &http.Server{
+			Addr:    "0.0.0.0:" + conf.Port,
+			Handler: mux,
+		}
+
+		mux.HandleFunc("/", rootHandler)
+		mux.HandleFunc("/getProduct", productHandler)
+
+		log.Fatal(srv.ListenAndServe())
 	}
-
-	srv := &http.Server{
-		Addr:         "0.0.0.0:" + conf.Port,
-		Handler:      mux,
-		TLSConfig:    cfg,
-		TLSNextProto: make(map[string]func(*http.Server, *tls.Conn, http.Handler)),
-	}
-
-	mux.HandleFunc("/", rootHandler)
-	mux.HandleFunc("/getProduct", productHandler)
-
-	log.Fatal(srv.ListenAndServeTLS("configs/"+conf.Cert, "configs/"+conf.Key))
 
 }
 

@@ -56,6 +56,7 @@ type serverConfig struct {
 	Cert           string `json:"cert"`
 	Key            string `json:"key"`
 	SecurityConfig string `json:"securityConfig"`
+	Encryption     bool   `json:"encryption"`
 }
 type nutrition struct {
 	Name  string  `json:"name"`
