@@ -18,13 +18,13 @@ lint: $(GOMETALINTER)
 BINARY := BuyingcreditBackend
 VERSION ?= vlatest
 PLATFORMS := windows linux
-ARCHS := amd64 arm
 os = $(word 1, $@)
 
 .PHONY: $(PLATFORMS)
 $(PLATFORMS):
 	mkdir -p release
-	GOOS=$(os) GOARCH=$(ARCHS) go build -o release/$(BINARY)-$(VERSION)-$(os)
+	GOOS=$(os) GOARCH=amd64 go build -o release/$(BINARY)-$(VERSION)-$(os)-amd64
+	GOOS=$(os) GOARCH=arm go build -o release/$(BINARY)-$(VERSION)-$(os)-arm
 
 .PHONY: release
 release: windows linux
