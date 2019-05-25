@@ -21,3 +21,6 @@ release/*
 configs/*.key
 configs/*.pem
 configs/main.conf
+
+.vscode
+
