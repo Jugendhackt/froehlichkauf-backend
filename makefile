@@ -24,7 +24,7 @@ os = $(word 1, $@)
 .PHONY: $(PLATFORMS)
 $(PLATFORMS):
 	mkdir -p release
-	GOOS=$(os) GOARCH=amd64 go build -o release/$(BINARY)-$(VERSION)-$(os)-$(ARCHS)
+	GOOS=$(os) GOARCH=$(ARCHS) go build -o release/$(BINARY)-$(VERSION)-$(os)
 
 .PHONY: release
 release: windows linux
