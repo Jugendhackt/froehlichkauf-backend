@@ -70,6 +70,17 @@ func productHandler(w http.ResponseWriter, req *http.Request) {
 
 	scoreEthik, errorEthik := ethik("")
 
+	var nutritions []nutrition
+
+	nutritions = append(nutritions, nutrition{"calories", data.Nutritional.Calories})
+	nutritions = append(nutritions, nutrition{"glucides", data.Nutritional.Glucides})
+	nutritions = append(nutritions, nutrition{"sugar", data.Nutritional.Sugar})
+	nutritions = append(nutritions, nutrition{"lipides", data.Nutritional.Lipides})
+	nutritions = append(nutritions, nutrition{"proteins", data.Nutritional.Proteins})
+	nutritions = append(nutritions, nutrition{"salt", data.Nutritional.Salt})
+
+	scoreHealth, scoreIngredients, scoreNutrition := gesundheit(nutritions, data.Contents)
+
 	response := "<h1>Everything is fine.</h1>"
 
 	response += "<h2>Umwelt:" + fToString(scoreUmwelt) + "</h2>"
@@ -83,6 +94,10 @@ func productHandler(w http.ResponseWriter, req *http.Request) {
 	if errorEthik != nil {
 		response += "<h3>" + errorEthik.Error() + "</h3><br />"
 	}
+
+	response += "<h2>Health:" + fToString(scoreHealth) + "</h2>"
+	response += "Ingredients:" + fToString(scoreIngredients) + "<br />"
+	response += "Nutrition:" + fToString(scoreNutrition) + "<br />"
 
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte(response))

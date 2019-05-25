@@ -1,26 +1,26 @@
 [
     {
-        "ingerdient":"Zucker",
+        "name":"Zucker",
         "value":1
     },
     {
-        "ingerdient":"Koffein",
+        "name":"Koffein",
         "value":2
     },
     {
-        "ingerdient": "Palmöl",
+        "name": "Palmöl",
         "value":0
     },
     {
-        "ingerdient": "Aroma",
+        "name": "Aroma",
         "value":1
     },
     {
-        "ingerdient": "Gelatine",
+        "name": "Gelatine",
         "value": 2
     },
     {
-        "ingerdient": "Salz",
+        "name": "Salz",
         "value": 3
     }
 ]

@@ -2,8 +2,8 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"log"
-	"math"
 )
 
 func umwelt(material, herkunftNutzer, herkunftProdukt string) (float32, float32, float32, error) {
@@ -60,23 +60,27 @@ func ethik(bedingungen string) (float32, error) {
 }
 
 func gesundheit(nutritions []nutrition, zutaten []string) (float32, float32, float32) {
+
 	var ingredients []nutrition
 	parseJSONFile("ingredients.json", &ingredients)
+	fmt.Printf("%+v\n", ingredients)
+	fmt.Printf("%+v\n", nutritions)
+
 	var punktzahlInhalt float32
 	var zähler int
 
 	for i := range zutaten {
-		zutat := zutaten[i]
 		for j := range ingredients {
-			if zutat == ingredients[j].Name {
-				punktzahlInhalt += ingredients[j].Value * ingredients[j].Value
+			if zutaten[i] == ingredients[j].Name {
+				log.Println("Zutat gefunden:" + zutaten[i])
+				punktzahlInhalt += ingredients[j].Value
 				zähler++
 				break
 			}
 		}
 	}
 
-	gesamtpunktzahlInhalt := float32(math.Sqrt(float64(punktzahlInhalt / float32(zähler))))
+	gesamtpunktzahlInhalt := punktzahlInhalt / float32(zähler)
 
 	var nährwertpunktzahl float32
 	var zähler2 int
@@ -84,26 +88,38 @@ func gesundheit(nutritions []nutrition, zutaten []string) (float32, float32, flo
 	for i := range nutritions {
 		switch nutritions[i].Name {
 		case "sugar":
-			if nutritions[i].Value < 5 {
+			if nutritions[i].Value < 0.05 {
 				nährwertpunktzahl += 5
-			} else if nutritions[i].Value < 22.5 {
+				log.Printf("sugar found: +5")
+			} else if nutritions[i].Value < 0.225 {
 				nährwertpunktzahl += 2
+				log.Printf("sugar found: +5")
+			} else {
+				log.Printf("lisugarpides found: +0")
 			}
 			zähler2++
 
 		case "salt":
-			if nutritions[i].Value < 0.3 {
+			if nutritions[i].Value < 0.003 {
 				nährwertpunktzahl += 5
-			} else if nutritions[i].Value < 1.5 {
+				log.Printf("salt found: +5")
+			} else if nutritions[i].Value < 0.015 {
 				nährwertpunktzahl += 2
+				log.Printf("salt found: +2")
+			} else {
+				log.Printf("salt found: +0")
 			}
 			zähler2++
 
 		case "lipides":
-			if nutritions[i].Value < 3 {
+			if nutritions[i].Value < 0.03 {
 				nährwertpunktzahl += 5
-			} else if nutritions[i].Value < 17.5 {
+				log.Printf("lipides found: +5")
+			} else if nutritions[i].Value < 0.175 {
 				nährwertpunktzahl += 2
+				log.Printf("lipides found: +2")
+			} else {
+				log.Printf("lipides found: +0")
 			}
 			zähler2++
 		}
