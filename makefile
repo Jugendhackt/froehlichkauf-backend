@@ -18,7 +18,7 @@ lint: $(GOMETALINTER)
 BINARY := BuyingcreditBackend
 VERSION ?= vlatest
 PLATFORMS := windows linux
-ARCHS := amd64 armfh
+ARCHS := amd64 arm
 os = $(word 1, $@)
 
 .PHONY: $(PLATFORMS)
