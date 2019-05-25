@@ -1,0 +1,26 @@
+[
+    {
+        "ingerdient":"Zucker",
+        "value":1
+    },
+    {
+        "ingerdient":"Koffein",
+        "value":2
+    },
+    {
+        "ingerdient": "Palmöl",
+        "value":0
+    },
+    {
+        "ingerdient": "Aroma",
+        "value":1
+    },
+    {
+        "ingerdient": "Gelatine",
+        "value": 2
+    },
+    {
+        "ingerdient": "Salz",
+        "value": 4
+    }
+]

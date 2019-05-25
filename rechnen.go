@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func umwelt(material, herkunftNutzer, herkunftProdukt string) (float32, float32, float32) {
+func umwelt(material, herkunftNutzer, herkunftProdukt string) (float32, float32, float32, error) {
 	var verpackung float32
 	var fehler error
 	var herkunft float32
@@ -34,10 +34,10 @@ func umwelt(material, herkunftNutzer, herkunftProdukt string) (float32, float32,
 		herkunft = 0
 	}
 
-	return 0.5*verpackung + 0.5*herkunft, verpackung, herkunft
+	return 0.5*verpackung + 0.5*herkunft, verpackung, herkunft, fehler
 }
 
-func ethik(bedingungen string) float32 {
+func ethik(bedingungen string) (float32, error) {
 	var herstellungsbedingungen float32
 	var fehler error
 
@@ -55,7 +55,7 @@ func ethik(bedingungen string) float32 {
 		log.Println(fehler.Error())
 	}
 
-	return herstellungsbedingungen
+	return herstellungsbedingungen, fehler
 }
 
 /*
