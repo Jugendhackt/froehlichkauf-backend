@@ -1,0 +1,24 @@
+{
+	"name": "Flora Power Mate",
+	"supplier": "Reineckes Getränke",
+	"country": "de",
+	"code": "4260031874056",
+	"contents": [
+			"Wasser",
+			"Zucker",
+			"Mate-Tee-Extrakt",
+			"natürliches Aroma",
+			"Zitronensäure",
+			"E 150d",
+			"Koffein",
+			"Kohlensäure"],
+	"nutritional": {
+			"calories":23,
+			"gluicides":0.053,
+			"sugar":0.05,
+			"lipides":0.002
+	},
+	"reusable": false,
+	"packaging": "glas",
+	"description": ""
+}
