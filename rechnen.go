@@ -38,7 +38,7 @@ func umwelt(material, herkunftNutzer, herkunftProdukt string) (float32, float32,
 	return 0.5*verpackung + 0.5*herkunft, verpackung, herkunft, fehler
 }
 
-func ethik(bedingungen string) (float32, error) {
+/*func ethik(bedingungen string) (float32, error) {
 	var herstellungsbedingungen float32
 	var fehler error
 
@@ -57,7 +57,7 @@ func ethik(bedingungen string) (float32, error) {
 	}
 
 	return herstellungsbedingungen, fehler
-}
+}*/
 
 func gesundheit(nutritions []nutrition, zutaten []string) (float32, float32, float32) {
 

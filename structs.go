@@ -62,3 +62,14 @@ type nutrition struct {
 	Name  string  `json:"name"`
 	Value float32 `json:"value"`
 }
+
+type companies struct {
+	CocaCola              []string `json:"Coca-Cola"`
+	Kellogs               []string `json:"Kellogs"`
+	Mars                  []string `json:"Mars"`
+	Nestle                []string `json:"Nestle"`
+	PepsiCo               []string `json:"PepsiCo"`
+	ProcterGambles        []string `json:"Procter & Gamble"`
+	Unilever              []string `json:"Unilever"`
+	MondelezInternational []string `json:"Mondelez International"`
+}
