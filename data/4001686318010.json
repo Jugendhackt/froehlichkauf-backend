@@ -1,0 +1,24 @@
+{
+	"name": "Haribo Saurer Zoo",
+	"supplier": "Haribo",
+	"country": "eu",
+	"code": "4001686318010",
+	"contents": [
+		"Zucker",
+		"Glukosesirup",
+		"Gelatine",
+		"Aroma",
+		"Camaubawachs",
+		"Invertzuckersirup"
+	],
+	"nutritional": {
+		"calories": 349,
+		"lipides": 0.005,
+		"glucides": 0.82,
+		"proteins": 0.045,
+		"salt": 0.0003
+	},
+	"reusable": false,
+	"packaging": "plastic",
+	"description": ""
+}

@@ -1,0 +1,22 @@
+﻿{
+	"name": "Fritz Kola",
+	"supplier": "Fritz-Spritz",
+	"country": "de",
+	"code": "4260107220015",
+	"contents": [
+		"Zucker",
+		"Farbstoff",
+		"ammonsulfit-zuckerkulör",
+		"Phosphorsäure",
+		"Koffein",
+		"Aroma"
+	],
+	"nutritional": {
+		"calories": 42,
+		"glucides": 0.11,
+		"coffein": 0.0025
+	},
+	"reusable": false,
+	"packaging": "glass",
+	"description": "Die beste Cola!"
+}

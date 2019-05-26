@@ -1,0 +1,33 @@
+{
+	"name": "nippon",
+	"supplier": "Hosta",
+	"country": "de",
+	"code": "021700900021",
+	"contents": [
+		"Zucker",
+		"Palmöl",
+		"Puffreis",
+		"Cerealien",
+		"Traubenzucker",
+		"Kakaobutter",
+		"Vollmilchpulver",
+		"Süßmolkenpulver",
+		"Süßlupinenmehl",
+		"Sheabutter",
+		"Milchzucker",
+		"Sojalecithine",
+		"E476",
+		"Salz",
+		"Aroma"
+	],
+	"nutritional": {
+		"calories": 534,
+		"lipides": 0.301,
+		"glucides": 0.589,
+		"proteins": 0.056,
+		"salt": 0.022
+	},
+	"reusable": false,
+	"packaging": "plastic",
+	"description": ""
+}

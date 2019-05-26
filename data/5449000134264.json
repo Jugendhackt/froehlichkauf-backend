@@ -1,0 +1,29 @@
+{
+	"name": "Coca-Cola Zero",
+	"supplier": "Coca-Cola",
+	"country": "de",
+	"code": "5449000134264",
+	"contents": [
+		"Wasser",
+		"Kohlensäure",
+		"E 150d",
+		"Phosphorsäure",
+		"Natriumcyclamat",
+		"Acesulfam",
+		"Aspartam",
+		"natürliches Aroma",
+		"Natriumcitrate",
+		"Koffein"
+		],
+	"nutritional": {
+		"calories":0.2,
+		"glucides":0,
+		"sugar":0,
+		"lipides":0,
+		"proteins":0,
+		"salt":0.002,
+		},
+	"reusable": false,
+	"packaging": "plastic",
+	"description": ""
+}
