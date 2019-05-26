@@ -13,23 +13,30 @@ type datapoint struct {
 }
 
 type response struct {
-	Name             string      `json:"name"`
-	Supplier         string      `json:"supplier"`
-	Country          string      `json:"country"`
-	Code             string      `json:"code"`
-	Contents         []string    `json:"contents"`
-	Nutritional      nutritional `json:"nutritional"`
-	Reusable         bool        `json:"reusable"`
-	Packaging        string      `json:"packaging"`
-	Description      string      `json:"description"`
-	Errors           string      `json:"errors"`
-	ScoreUmwelt      float32     `json:"scoreUmwelt"`
-	ScoreVerpackung  float32     `json:"scoreVerpackung"`
-	ScoreHerkunft    float32     `json:"scoreHerkunft"`
-	ScoreEthik       float32     `json:"scoreEthik"`
-	ScoreHealth      float32     `json:"scoreHealth"`
-	ScoreIngredients float32     `json:"scoreIngredients"`
-	ScoreNutrition   float32     `json:"scoreNutrition"`
+	Name                  string      `json:"name"`
+	Supplier              string      `json:"supplier"`
+	Country               string      `json:"country"`
+	Code                  string      `json:"code"`
+	Contents              []string    `json:"contents"`
+	Nutritional           nutritional `json:"nutritional"`
+	Reusable              bool        `json:"reusable"`
+	Packaging             string      `json:"packaging"`
+	Description           string      `json:"description"`
+	Errors                string      `json:"errors"`
+	ScoreUmwelt           int         `json:"scoreUmwelt"`
+	ScoreUmweltHalve      bool        `json:"scoreUmweltHalve"`
+	ScoreVerpackung       int         `json:"scoreVerpackung"`
+	ScoreVerpackungHalve  bool        `json:"scoreVerpackungHalve"`
+	ScoreHerkunft         int         `json:"scoreHerkunft"`
+	ScoreHerkunftHalve    bool        `json:"scoreHerkunftHalve"`
+	ScoreEthik            int         `json:"scoreEthik"`
+	ScoreEthikHalve       bool        `json:"scoreEthikHalve"`
+	ScoreHealth           int         `json:"scoreHealth"`
+	ScoreHealthHalve      bool        `json:"scoreHealthHalve"`
+	ScoreIngredients      int         `json:"scoreIngredients"`
+	ScoreIngredientsHalve bool        `json:"scoreIngredientsHalve"`
+	ScoreNutrition        int         `json:"scoreNutrition"`
+	ScoreNutritionHalve   bool        `json:"scoreNutritionHalve"`
 }
 
 type nutritional struct {

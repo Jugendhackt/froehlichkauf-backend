@@ -245,13 +245,56 @@ func productHandler(w http.ResponseWriter, req *http.Request) {
 						resp.Contents = data.Contents
 						resp.Code = data.Code
 						resp.Description = data.Description
-						resp.ScoreEthik = scoreEthik
-						resp.ScoreHealth = scoreHealth
-						resp.ScoreHerkunft = scoreHerkunft
-						resp.ScoreIngredients = scoreIngredients
-						resp.ScoreNutrition = scoreNutrition
-						resp.ScoreUmwelt = scoreUmwelt
-						resp.ScoreVerpackung = scoreVerpackung
+						resp.ScoreEthik = int(scoreEthik)
+						resp.ScoreHealth = int(scoreHealth)
+						resp.ScoreHerkunft = int(scoreHerkunft)
+						resp.ScoreIngredients = int(scoreIngredients)
+						resp.ScoreNutrition = int(scoreNutrition)
+						resp.ScoreUmwelt = int(scoreUmwelt)
+						resp.ScoreVerpackung = int(scoreVerpackung)
+
+						if scoreEthik-float32(resp.ScoreEthik) >= 0.5 {
+							resp.ScoreEthikHalve = true
+						} else {
+							resp.ScoreEthikHalve = false
+						}
+
+						if scoreHealth-float32(resp.ScoreHealth) >= 0.5 {
+							resp.ScoreHealthHalve = true
+						} else {
+							resp.ScoreHealthHalve = false
+						}
+
+						if scoreHerkunft-float32(resp.ScoreHerkunft) >= 0.5 {
+							resp.ScoreHerkunftHalve = true
+						} else {
+							resp.ScoreHerkunftHalve = false
+						}
+
+						if scoreIngredients-float32(resp.ScoreIngredients) >= 0.5 {
+							resp.ScoreIngredientsHalve = true
+						} else {
+							resp.ScoreIngredientsHalve = false
+						}
+
+						if scoreNutrition-float32(resp.ScoreNutrition) >= 0.5 {
+							resp.ScoreNutritionHalve = true
+						} else {
+							resp.ScoreNutritionHalve = false
+						}
+
+						if scoreUmwelt-float32(resp.ScoreUmwelt) >= 0.5 {
+							resp.ScoreUmweltHalve = true
+						} else {
+							resp.ScoreUmweltHalve = false
+						}
+
+						if scoreVerpackung-float32(resp.ScoreVerpackung) >= 0.5 {
+							resp.ScoreVerpackungHalve = true
+						} else {
+							resp.ScoreVerpackungHalve = false
+						}
+
 						resp.Errors = ""
 
 						if errorUmwelt != nil {
