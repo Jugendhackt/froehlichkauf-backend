@@ -1,15 +1,55 @@
-{
-	"Coca-Cola":0,
-	"Kellogs":0,
-	"Mars":0,
-	"Nestle":0,
-	"PepsiCo":0,
-	"Procter & Gamble":0,
-	"Unilever":0,
-	"Mondelez International":0,
-	"Haribo":0,
-	"Dr. Oetker":0,
-	"Hosta":0,
-	"Reineckes Getränke":0,
-	"Fritz-Spritz":0,
-}
+[
+	{
+		"name":"Coca-Cola",
+		"value":0
+	},
+	{
+		"name":"Kellogs",
+		"value":0
+	},
+	{
+		"name":"Mars",
+		"value":0
+	},
+	{
+		"name":"Nestle",
+		"value":0
+	},
+	{
+		"name":"PepsiCo",
+		"value":0
+	},
+	{
+		"name":"Procter & Gamble",
+		"value":0
+	},
+	{
+		"name":"Unilever",
+		"value":0
+	},
+	{
+		"name":"Mondelez International",
+		"value":0
+	},
+	{
+		"name":"Haribo",
+		"value":0
+	},
+	{
+		"name":"Dr. Oetker",
+		"value":0
+	},
+	{
+		"name":"Hosta",
+		"value":0
+	},
+	{
+		"name":"Reineckes Getränke",
+		"value":0
+	},
+	{
+		"name":"Fritz-Spritz",
+		"value":0
+	}
+	
+]
