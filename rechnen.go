@@ -16,6 +16,8 @@ func umwelt(material, herkunftNutzer, herkunftProdukt string) (float32, float32,
 		verpackung = 0
 	case "paper":
 		verpackung = 2
+	case "glas":
+		verpackung = 3
 	case "glass":
 		verpackung = 3
 	case "none":
