@@ -15,7 +15,7 @@ $(GOMETALINTER):
 lint: $(GOMETALINTER)
 	gometalinter ./... --vendor --errors
 
-BINARY := BuyingcreditBackend
+BINARY := FröhlichKaufBackend
 VERSION ?= vlatest
 PLATFORMS := windows linux
 os = $(word 1, $@)
