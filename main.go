@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -97,7 +98,7 @@ func productHandler(w http.ResponseWriter, req *http.Request) {
 
 				var companylist companies
 
-				err = newParseJSONFile("Tochterfirmen", &companylist)
+				err = newParseJSONFile("Tochterfirmen.json", &companylist)
 
 				if err != nil {
 					w.WriteHeader(http.StatusNotFound)
@@ -186,51 +187,86 @@ func productHandler(w http.ResponseWriter, req *http.Request) {
 							}
 						}
 					}
-					//	scoreEthik, errorEthik := ethik("")
 
-					var nutritions []nutrition
+					var brandvalue []nutrition
 
-					nutritions = append(nutritions, nutrition{"calories", data.Nutritional.Calories})
-					nutritions = append(nutritions, nutrition{"glucides", data.Nutritional.Glucides})
-					nutritions = append(nutritions, nutrition{"sugar", data.Nutritional.Sugar})
-					nutritions = append(nutritions, nutrition{"lipides", data.Nutritional.Lipides})
-					nutritions = append(nutritions, nutrition{"proteins", data.Nutritional.Proteins})
-					nutritions = append(nutritions, nutrition{"salt", data.Nutritional.Salt})
+					err = newParseJSONFile("Markenbewertung.json", &brandvalue)
 
-					scoreHealth, scoreIngredients, scoreNutrition := gesundheit(nutritions, data.Contents)
+					if err != nil {
+						w.WriteHeader(http.StatusNotFound)
+						w.Write([]byte("Error with json File:" + err.Error()))
+					} else {
+						var scoreEthik float32
+						var errorEthik error
 
-					var resp response
+						if found {
+							for i := range brandvalue {
+								if brandvalue[i].Name == mother {
+									scoreEthik = brandvalue[i].Value
+									break
+								}
+							}
+						} else {
+							for i := range brandvalue {
+								if brandvalue[i].Name == data.Supplier {
+									found = true
+									scoreEthik = brandvalue[i].Value
+									break
+								}
+							}
+						}
 
-					resp.Name = data.Name
-					resp.Nutritional = data.Nutritional
-					resp.Packaging = data.Packaging
-					resp.Reusable = data.Reusable
-					resp.Supplier = data.Supplier
-					resp.Country = data.Country
-					resp.Contents = data.Contents
-					resp.Code = data.Code
-					resp.Description = data.Description
-					resp.ScoreEthik = scoreEthik
-					resp.ScoreHealth = scoreHealth
-					resp.ScoreHerkunft = scoreHerkunft
-					resp.ScoreIngredients = scoreIngredients
-					resp.ScoreNutrition = scoreNutrition
-					resp.ScoreUmwelt = scoreUmwelt
-					resp.ScoreVerpackung = scoreVerpackung
-					resp.Errors = ""
+						if !found {
+							scoreEthik = 0
+							errorEthik = errors.New("company not found")
+						}
 
-					if errorUmwelt != nil {
-						resp.Errors += ";Umwelt:" + errorUmwelt.Error()
+						//	scoreEthik, errorEthik := ethik("")
+
+						var nutritions []nutrition
+
+						nutritions = append(nutritions, nutrition{"calories", data.Nutritional.Calories})
+						nutritions = append(nutritions, nutrition{"glucides", data.Nutritional.Glucides})
+						nutritions = append(nutritions, nutrition{"sugar", data.Nutritional.Sugar})
+						nutritions = append(nutritions, nutrition{"lipides", data.Nutritional.Lipides})
+						nutritions = append(nutritions, nutrition{"proteins", data.Nutritional.Proteins})
+						nutritions = append(nutritions, nutrition{"salt", data.Nutritional.Salt})
+
+						scoreHealth, scoreIngredients, scoreNutrition := gesundheit(nutritions, data.Contents)
+
+						var resp response
+
+						resp.Name = data.Name
+						resp.Nutritional = data.Nutritional
+						resp.Packaging = data.Packaging
+						resp.Reusable = data.Reusable
+						resp.Supplier = data.Supplier
+						resp.Country = data.Country
+						resp.Contents = data.Contents
+						resp.Code = data.Code
+						resp.Description = data.Description
+						resp.ScoreEthik = scoreEthik
+						resp.ScoreHealth = scoreHealth
+						resp.ScoreHerkunft = scoreHerkunft
+						resp.ScoreIngredients = scoreIngredients
+						resp.ScoreNutrition = scoreNutrition
+						resp.ScoreUmwelt = scoreUmwelt
+						resp.ScoreVerpackung = scoreVerpackung
+						resp.Errors = ""
+
+						if errorUmwelt != nil {
+							resp.Errors += ";Umwelt:" + errorUmwelt.Error()
+						}
+						if errorEthik != nil {
+							resp.Errors += ";Ethik:" + errorEthik.Error()
+						}
+
+						w.Header().Set("Content-Type", "application/json")
+
+						err = json.NewEncoder(w).Encode(resp)
+
+						checkErr(err)
 					}
-					if errorEthik != nil {
-						resp.Errors += ";Ethik:" + errorEthik.Error()
-					}
-
-					w.Header().Set("Content-Type", "application/json")
-
-					err = json.NewEncoder(w).Encode(resp)
-
-					checkErr(err)
 				}
 			}
 		}
